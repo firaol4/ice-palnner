@@ -20,12 +20,8 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
 
   constructor() {
     super();
-    this.title = "";
-    this.t = this.t || {};
-    this.t = {
-      ...this.t,
-      title: "Title",
-    };
+    this.title = "Ice Planner";
+    
     this.registerLocalization({
       context: this,
       localesPath:
@@ -67,8 +63,22 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
   render() {
     return html`
 <div class="wrapper">
-  <h3><span>${this.t.title}:</span> ${this.title}</h3>
-  <slot></slot>
+  <div><h1>${this.title}</h1></div>
+  <div><h2>Team Name</h2></div>
+  <div><h2>Cost Per Hour</h2></div>
+  <div><h2>Total Cost for Jerseys</h2></div>
+  <div><h2>Cost of Coach</h2></div>
+  <div><h2>Logo</h2></div>
+  <div><h2>Total Cost</h2></div>
+
+
+
+
+
+
+
+  
+  
 </div>`;
   }
 

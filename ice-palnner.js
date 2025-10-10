@@ -128,6 +128,17 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
         padding: 16px;
         text-align: center;
       }
+      .team-logo {
+      width: 200px;       
+      height: auto;       
+      margin-top: 12px;
+      border-radius: 8px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: var(--ddd-boxShadow-sm); 
+      
+    }
     `];
   }
   updateTotal(e) {
@@ -159,7 +170,8 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
   <div><h1>${this.title}</h1></div>
   
   <div class="section">
-    <h2>Logo</h2>
+    <img src="https://www.publicdomainpictures.net/pictures/160000/nahled/bloemrijk-paars-getal-47.jpg" alt="Team Logo" class="team-logo" />
+
   </div>
   
   <div class="section">

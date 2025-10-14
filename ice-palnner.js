@@ -36,6 +36,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
     this.iceCostPerHour = 0;
     this.numPlayers = 0;
     this.costPerPlayer = 0;
+    this.teamName = "";
     
     
     this.registerLocalization({

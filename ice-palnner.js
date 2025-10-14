@@ -37,6 +37,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
     this.numPlayers = 0;
     this.costPerPlayer = 0;
     
+    
     this.registerLocalization({
       context: this,
       localesPath:
@@ -65,6 +66,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
       hours: { type: Number },
       iceCostPerHour: { type: Number },
       numPlayers: { type: Number },
+      teamName: { type: String },
 
     };
   }
@@ -75,6 +77,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
   
     const fields = [
       "iceCostPerHour",
+      "teamName",
       "hours",
       "jerseyCost",
       "coachCost",
@@ -101,7 +104,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
   
   updateURL() {
     const params = new URLSearchParams();
-  
+    params.set("teamName", this.teamName);
     params.set("iceCostPerHour", this.iceCostPerHour);
     params.set("hours", this.hours);
     params.set("jerseyCost", this.jerseyCost);
@@ -243,6 +246,11 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
       type="text"
       class="teamName"
       placeholder="Enter team name"
+      .value=${this.teamName || ""}
+      @input=${(e) => {
+        this.teamName = e.target.value;
+        this.updateURL();
+      }}
     />
   </div>
 

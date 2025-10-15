@@ -37,6 +37,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
     this.numPlayers = 0;
     this.costPerPlayer = 0;
     this.teamName = "";
+    this.fees = 0;
     
     
     this.registerLocalization({
@@ -68,6 +69,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
       iceCostPerHour: { type: Number },
       numPlayers: { type: Number },
       teamName: { type: String },
+      fees: { type: Number },
 
     };
   }
@@ -101,6 +103,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
     if (hasParams) {
       this.updateTotal();
     }
+    
   }
   
   updateURL() {
@@ -125,7 +128,6 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
     css`
       :host {
       display: flex;
-      
       align-items: center;
       justify-content: center;
       background-color: var(--ddd-theme-accent);
@@ -138,31 +140,33 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
 
     .wrapper {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: var(--ddd-spacing-3);
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      
       width: 100%;
       max-width: 900px;
-      align-items: start;
+      
     }
+    .wrapper:focus-within .total-fixed { 
+      position: fixed; bottom: 0; left: 0; right: 0; width: 100%; box-shadow: 0 -2px 8px rgba(0,0,0,0.2); z-index: 999; padding: 16px; text-align: center; }
 
     h1 {
-      grid-column: 1 / -1;
+      
       text-align: center;
       font-size: var(--ddd-font-size-l);
       margin-bottom: var(--ddd-spacing-2);
     }
 
     .section {
-      background-color: var(--ddd-theme-default-warningLight);
-      color: var(--ddd-theme-default-info);
-      border-radius: var(--ddd-radius-md);
-      box-shadow: var(--ddd-boxShadow-sm);
+      background-color: light-dark (var(--ddd-theme-default-alertImmediate, --ddd-theme-default-gradient-newsFeature));
+
+      color: light-dark (var(--ddd-theme-default-alertImmediate, --ddd-theme-default-gradient-newsFeature));;
+      
       padding: var(--ddd-spacing-3);
       text-align: center;
     }
 
     .section h2 {
-      font-size: var(--ddd-font-size-s);
+      font-size: var(--ddd-font-size-m);
       margin-bottom: var(--ddd-spacing-1);
     }
 
@@ -221,10 +225,12 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
     // So it wont get divide by 0 error
     const players = this.numPlayers > 0 ? this.numPlayers : 1;
     
+    
 
     const subtotal = iceCost + jerseyCost + coachCost;
     const fees = subtotal * (feePercent / 100) + feeFixed;
     this.totalCost = (subtotal + fees);
+    this.fees = fees;
     this.costPerPlayer = this.totalCost / players;
     this.requestUpdate();
     this.updateURL();
@@ -319,6 +325,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
 
   <div class="section total-fixed">
     <h2>Total Cost</h2>
+    <p>Fees: $${this.fees.toFixed(2)}</p>
     <p>Total $${this.totalCost.toFixed(2)}</p>
     <p>Per Player: $${this.costPerPlayer.toFixed(2)}</p>
   </div>

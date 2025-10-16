@@ -140,14 +140,22 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
 
     .wrapper {
       display: grid;
-      grid-template-columns: repeat(2, minmax(220px, 1fr));
       
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       width: 100%;
       max-width: 900px;
       
     }
     .wrapper:focus-within .total-fixed { 
-      position: fixed; bottom: 0; left: 0; right: 0; width: 100%; box-shadow: 0 -2px 8px rgba(0,0,0,0.2); z-index: 999; padding: 16px; text-align: center; }
+      position: sticky; 
+      bottom: 0; 
+      left: 0; 
+      right: 0; 
+      width: 100%; 
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.2); 
+      z-index: 999; 
+      padding: 16px; 
+      text-align: center; }
 
     h1 {
       

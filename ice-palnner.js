@@ -135,27 +135,35 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
       font-family: var(--ddd-font-navigation);
       min-height: 100vh;
       padding: var(--ddd-spacing-3);
-      box-sizing: border-box;
+      
     }
 
     .wrapper {
       display: grid;
-      
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      max-width: 900px;
+      max-width: 1000px;
+      margin: 0 auto; 
       
     }
-    .wrapper:focus-within .total-fixed { 
-      position: sticky; 
-      bottom: 0; 
-      left: 0; 
-      right: 0; 
-      width: 100%; 
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.2); 
-      z-index: 999; 
-      padding: 16px; 
-      text-align: center; }
+    .static {
+      flex: 0 0 30%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--ddd-spacing-3, 16px);
+    }
+
+    .dynamic {
+      flex: 0 0 70%; 
+      display: flex;
+      flex-direction: column;
+      gap: var(--ddd-spacing-3, 16px);
+    }
+   
 
     h1 {
       
@@ -166,23 +174,43 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
 
     .section {
       background-color: light-dark (var(--ddd-theme-default-alertImmediate, --ddd-theme-default-gradient-newsFeature));
-
-      color: light-dark (var(--ddd-theme-default-alertImmediate, --ddd-theme-default-gradient-newsFeature));;
-      
+      color: light-dark (var(--ddd-theme-default-alertImmediate, --ddd-theme-default-gradient-newsFeature));
+      flex-wrap: wrap;
       padding: var(--ddd-spacing-3);
-      text-align: center;
+      text-align: inline;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .section h2 {
-      font-size: var(--ddd-font-size-m);
+      font-size: var(--ddd-font-size-s);
       margin-bottom: var(--ddd-spacing-1);
+      flex: 1;
     }
 
     number-input, input {
       width: 100%;
-      max-width: 180px;
+      width: 70vw;
+      max-width: 280px;
       margin: auto;
       display: block;
+    }
+    .copy-btn {
+      display: block;
+      margin: 12px auto 0 auto;
+      padding: 10px 20px;
+      font-size: var(--ddd-font-size-s);
+      font-weight: var(--ddd-font-weight-bold);
+      background-color: var(--ddd-theme-primary);
+      color: white;
+      border: none;
+      border-radius: var(--ddd-radius-sm);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .copy-btn:hover {
+      background-color: var(--ddd-theme-default-warning);
     }
 
     .team-logo {
@@ -202,6 +230,22 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
       padding: var(--ddd-spacing-3);
       border-radius: var(--ddd-radius-md);
       box-shadow: var(--ddd-boxShadow-sm);
+      display: flex;
+      flex-direction: column; /* stack items vertically */
+      gap: 8px;
+    }
+    label {
+      display: inline-block;
+      width: 30%; /* adjust space for label */
+      text-align: right;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    input {
+      display: inline-block;
+      width: 60%; /* adjust space for input */
+      vertical-align: middle;
     }
 
     p {
@@ -243,20 +287,32 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
     this.requestUpdate();
     this.updateURL();
   }
+  copyShareLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        alert("✅ Link copied to clipboard!");
+      })
+      .catch(() => {
+        alert("❌ Failed to copy link.");
+      });
+  }
 
 
   // Lit render the HTML
   render() {
     return html`
 <div class="wrapper">
+  <div class="static">
   <div><h1>${this.title}</h1></div>
   
   <div class="section">
     <img src=${this.source} alt="Team Logo" class="team-logo" />
   </div>
-  
-  <div class="section">
-    <h2>Team Name:</h2>
+
+   <div class="section">
+    
+   <h2>Team Name:</h2>
     <input
       type="text"
       class="teamName"
@@ -269,11 +325,23 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
     />
   </div>
 
+  <div class="section total-fixed">
+    
+   
+    <p>Total $ ${this.totalCost.toFixed(2)} </p>
+    <p>Fees: $ ${this.fees.toFixed(2)} </p>
+    <p>Per Player: $ ${this.costPerPlayer.toFixed(2)} </p>
+  </div>
+  <button class="copy-btn" @click=${this.copyShareLink}>Copy Share Link</button>
+
+  </div>
+ 
+  <div class="dynamic">
   <div class="section">
-    <h2>Ice Time Cost</h2>
+    
     <number-input
       id="iceCostPerHour"
-      label="Cost Per Hour ($)"
+      label="Ice Cost Per Hour ($)"
       .value=${this.iceCostPerHour}
       @value-changed=${this.updateTotal}
     ></number-input>
@@ -286,30 +354,30 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
   </div>
 
   <div class="section">
-    <h2>Total Cost for Jerseys</h2>
+    
     <number-input
       id="jerseyCost"
-      label="Jersey Cost ($)"
+      label="Cost Per Jersey ($)"
       .value=${this.jerseyCost}
       @value-changed=${this.updateTotal}
     ></number-input>
   </div>
 
   <div class="section">
-    <h2>Cost of Coach</h2>
+    
     <number-input
       id="coachCost"
-      label="Coach Cost ($)"
+      label="Coach of Cost ($)"
       .value=${this.coachCost}
       @value-changed=${this.updateTotal}
     ></number-input>
   </div>
 
   <div class="section">
-    <h2>Transaction Fee</h2>
+    
     <number-input
       id="feePercent"
-      label="Percent (%)"
+      label="Fee Percentage (%)"
       .value=${this.feePercent}
       @value-changed=${this.updateTotal}
     ></number-input>
@@ -322,7 +390,7 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
   </div>
 
   <div class="section">
-    <h2>Players on Team:</h2>
+    
     <number-input
       id="numPlayers"
       label="Number of Players"
@@ -330,13 +398,9 @@ export class IcePalnner extends DDDSuper(I18NMixin(LitElement)) {
       @value-changed=${this.updateTotal}
     ></number-input>
   </div>
-
-  <div class="section total-fixed">
-    <h2>Total Cost</h2>
-    <p>Fees: $${this.fees.toFixed(2)}</p>
-    <p>Total $${this.totalCost.toFixed(2)}</p>
-    <p>Per Player: $${this.costPerPlayer.toFixed(2)}</p>
   </div>
+
+  
 </div>`;
 }
 
